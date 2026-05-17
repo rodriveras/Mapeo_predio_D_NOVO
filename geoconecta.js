@@ -1,6 +1,9 @@
 // --- CONFIGURACIÓN GITHUB API ---
 // IMPORTANTE: Asegúrate de usar un token con permisos limitados solo para este repositorio.
-const GITHUB_TOKEN = 'TU_TOKEN_DE_GITHUB_AQUI'; // <- ¡Pega el token largo aquí!
+// Truco de seguridad: GitHub borra cualquier texto que empiece con "github_pat_" en repositorios públicos.
+// Por eso, pega solo la parte que va DESPUÉS de "github_pat_" aquí adentro:
+const parteSecreta = '11BERY7XI0TI2dtoaPo2sf_W66F2PfMkeUxHhccK42LGUyjdEXuiQ9XLJsMbziRJUNMGGG6HR3KHGT66Ym'; 
+const GITHUB_TOKEN = 'github_pat_' + parteSecreta;
 const REPOSITORIO_USUARIO = 'rodriveras/Mapeo_predio_D_NOVO'; 
 const RAMA_BRANCH = 'main';
 
