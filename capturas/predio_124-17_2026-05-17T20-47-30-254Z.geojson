@@ -1,0 +1,37 @@
+{
+  "type": "Feature",
+  "properties": {
+    "productor": "Guom",
+    "rol_sii": "124-17",
+    "especie": "Cerezo",
+    "variedad": "",
+    "tipo_riego": "Goteo",
+    "infraestructura": "Caseta de Riego",
+    "condicion": "Excelente",
+    "superficie_ha": "681.195 Ha",
+    "fecha_captura": "2026-05-17T20:47:30.243Z"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -72.262264,
+          -37.509843
+        ],
+        [
+          -72.235611,
+          -37.529749
+        ],
+        [
+          -72.216797,
+          -37.491798
+        ],
+        [
+          -72.262264,
+          -37.509843
+        ]
+      ]
+    ]
+  }
+}
