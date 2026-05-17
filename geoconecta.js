@@ -59,6 +59,47 @@ document.addEventListener('DOMContentLoaded', function() {
         {"Catastro Frutícola (CIREN)": cirenWMS}
     ).addTo(map);
 
+    // --- NUEVA HERRAMIENTA: BOTÓN DE GEOLOCALIZACIÓN ---
+    var LocateControl = L.Control.extend({
+        options: { position: 'topleft' }, // Se pondrá debajo de los botones de zoom
+        onAdd: function (map) {
+            var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+            var button = L.DomUtil.create('a', '', container);
+            button.innerHTML = '📍'; 
+            button.href = '#';
+            button.title = 'Ir a mi ubicación actual';
+            button.style.fontSize = '1.2rem';
+            button.style.lineHeight = '30px';
+            button.style.textAlign = 'center';
+            button.style.textDecoration = 'none';
+            button.style.backgroundColor = '#fff';
+            
+            L.DomEvent.on(button, 'click', function(e) {
+                L.DomEvent.preventDefault(e);
+                button.innerHTML = '⏳'; // Cambia el ícono mientras busca
+                map.locate({setView: true, maxZoom: 17, enableHighAccuracy: true});
+            });
+            return container;
+        }
+    });
+    
+    var locateBtn = new LocateControl();
+    map.addControl(locateBtn);
+
+    // Cuando encuentra la ubicación, poner un puntito azul temporal y restaurar el ícono
+    var tempMarker = null;
+    map.on('locationfound', function(e) {
+        if(tempMarker) map.removeLayer(tempMarker);
+        tempMarker = L.circleMarker(e.latlng, {radius: 8, color: '#2980b9', fillColor: '#3498db', fillOpacity: 0.8}).addTo(map);
+        document.querySelector('a[title="Ir a mi ubicación actual"]').innerHTML = '📍';
+    });
+
+    map.on('locationerror', function(e) {
+        alert("No se pudo obtener tu ubicación. Verifica que el GPS esté encendido y dale permiso al navegador.");
+        document.querySelector('a[title="Ir a mi ubicación actual"]').innerHTML = '📍';
+    });
+    // --- FIN GEOLOCALIZACIÓN ---
+
     // 4. Configurar Leaflet.draw
     var drawnItems = new L.FeatureGroup();
     map.addLayer(drawnItems);
@@ -79,7 +120,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             },
             marker: true, // Habilitar puntos
-            polyline: false,
+            polyline: {
+                shapeOptions: {
+                    color: '#3498db', // Color azul para canales o tuberías
+                    weight: 4
+                }
+            },
             rectangle: false,
             circle: false,
             circlemarker: false
@@ -95,15 +141,24 @@ document.addEventListener('DOMContentLoaded', function() {
         currentLayer = e.layer;
         var type = e.layerType;
 
-        let areaStr = "N/A (Punto)";
+        var geojson = currentLayer.toGeoJSON();
+        let medidaStr = "N/A (Punto)";
+        let labelTexto = "Dimensión";
+
         if (type === 'polygon') {
-            var geojson = currentLayer.toGeoJSON();
             var areaM2 = turf.area(geojson);
             var areaHa = (areaM2 / 10000).toFixed(3);
-            areaStr = areaHa + " Ha";
+            medidaStr = areaHa + " Ha";
+            labelTexto = "Superficie Calculada";
+        } else if (type === 'polyline') {
+            // Calcular la longitud de la línea con Turf.js
+            var longitud = turf.length(geojson, {units: 'meters'});
+            medidaStr = longitud.toFixed(1) + " metros";
+            labelTexto = "Longitud de Canal/Tubería";
         }
 
-        document.getElementById('gc-superficie').innerText = areaStr;
+        document.getElementById('gc-label-medida').innerText = labelTexto;
+        document.getElementById('gc-superficie').innerText = medidaStr;
         document.getElementById('geoconecta-modal').style.display = 'block';
     });
 
@@ -179,7 +234,7 @@ function inyectarFormulario() {
                     </select>
                 </div>
                 <div class="gc-form-group">
-                    <label>Superficie</label>
+                    <label id="gc-label-medida">Superficie</label>
                     <div id="gc-superficie-container">
                         <span id="gc-superficie">0 Ha</span>
                     </div>

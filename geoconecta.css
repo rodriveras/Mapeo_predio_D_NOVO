@@ -137,3 +137,82 @@
     color: #2980b9;
     border: 1px dashed #3498db;
 }
+
+/* --- ENCABEZADO CORPORATIVO --- */
+#app-header {
+    position: absolute;
+    top: 15px;
+    left: 60px; /* Deja espacio para los botones de zoom en escritorio */
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    border-radius: 8px;
+    padding: 10px 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    pointer-events: auto;
+}
+
+.header-logos {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-right: 1px solid #ccc;
+    padding-right: 15px;
+}
+
+.logo-dnovo {
+    height: 35px;
+    object-fit: contain;
+}
+
+.logo-corfo {
+    height: 28px;
+    object-fit: contain;
+}
+
+.header-title {
+    display: flex;
+    flex-direction: column;
+}
+
+.header-title h1 {
+    margin: 0;
+    font-size: 16px;
+    color: #2c3e50;
+    font-weight: 700;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header-title p {
+    margin: 0;
+    font-size: 12px;
+    color: #7f8c8d;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@media (max-width: 600px) {
+    #app-header {
+        top: 0;
+        left: 0;
+        width: 100%;
+        border-radius: 0;
+        justify-content: space-between;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+    .header-logos {
+        border-right: none;
+    }
+    .header-title {
+        display: none; /* Ocultar título en celulares muy pequeños para no tapar el mapa */
+    }
+    .leaflet-control-container .leaflet-top.leaflet-left {
+        margin-top: 60px; /* Bajar controles del mapa */
+    }
+    .leaflet-control-container .leaflet-top.leaflet-right {
+        margin-top: 60px;
+    }
+}
