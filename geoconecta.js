@@ -93,7 +93,6 @@ document.addEventListener('DOMContentLoaded', function() {
     L.control.layers(
         {"Satélite (Google)": googleSat, "Calles (OSM)": osm}, 
         {
-            "Límites Regionales": limitesRegionales,
             "Catastro Frutícola (CIREN)": cirenWMS
         }
     ).addTo(map);
