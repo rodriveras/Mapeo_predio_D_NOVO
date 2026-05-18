@@ -8,6 +8,7 @@ const REPOSITORIO_USUARIO = 'rodriveras/Mapeo_predio_D_NOVO';
 const RAMA_BRANCH = 'main';
 
 let currentLayer = null;
+let currentDrawType = null;
 let map; // Definimos el mapa globalmente
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -200,22 +201,47 @@ document.addEventListener('DOMContentLoaded', function() {
     // 6. Eventos de Dibujo
     map.on(L.Draw.Event.CREATED, function (e) {
         currentLayer = e.layer;
-        var type = e.layerType;
+        currentDrawType = e.layerType;
 
         var geojson = currentLayer.toGeoJSON();
         let medidaStr = "N/A (Punto)";
         let labelTexto = "Dimensión";
 
-        if (type === 'polygon') {
+        // Referencias a los contenedores
+        const grupoPredio = document.getElementById('grupo-predio');
+        const grupoInfra = document.getElementById('grupo-linea-punto');
+        const tituloForm = document.getElementById('gc-titulo-form');
+
+        if (currentDrawType === 'polygon') {
             var areaM2 = turf.area(geojson);
             var areaHa = (areaM2 / 10000).toFixed(3);
             medidaStr = areaHa + " Ha";
             labelTexto = "Superficie Calculada";
-        } else if (type === 'polyline') {
-            // Calcular la longitud de la línea con Turf.js
-            var longitud = turf.length(geojson, {units: 'meters'});
-            medidaStr = longitud.toFixed(1) + " metros";
-            labelTexto = "Longitud de Canal/Tubería";
+            
+            tituloForm.innerText = "Datos del Predio Frutícola";
+            grupoPredio.style.display = 'block';
+            grupoInfra.style.display = 'none';
+            document.getElementById('gc-especie').required = true;
+            document.getElementById('gc-riego').required = true;
+            document.getElementById('gc-tipo-infra').required = false;
+
+        } else {
+            // Línea o Punto
+            if (currentDrawType === 'polyline') {
+                var longitud = turf.length(geojson, {units: 'meters'});
+                medidaStr = longitud.toFixed(1) + " metros";
+                labelTexto = "Longitud de Canal/Tubería";
+            } else {
+                medidaStr = "1 Unidad";
+                labelTexto = "Punto de Infraestructura";
+            }
+            
+            tituloForm.innerText = "Datos de Infraestructura";
+            grupoPredio.style.display = 'none';
+            grupoInfra.style.display = 'block';
+            document.getElementById('gc-especie').required = false;
+            document.getElementById('gc-riego').required = false;
+            document.getElementById('gc-tipo-infra').required = true;
         }
 
         document.getElementById('gc-label-medida').innerText = labelTexto;
@@ -227,6 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('gc-btn-cancelar').addEventListener('click', function() {
         document.getElementById('geoconecta-modal').style.display = 'none';
         currentLayer = null; 
+        currentDrawType = null;
         document.getElementById('geoconecta-form').reset();
     });
 
@@ -240,50 +267,72 @@ function inyectarFormulario() {
     const formHTML = `
     <div id="geoconecta-modal">
         <div id="geoconecta-form-container">
-            <h3>Datos del Predio / Infraestructura</h3>
+            <h3 id="gc-titulo-form">Datos del Predio / Infraestructura</h3>
             <form id="geoconecta-form">
                 <div class="gc-form-group">
-                    <label>Productor</label>
+                    <label>Responsable / Productor</label>
                     <input type="text" id="gc-productor" class="gc-form-control" placeholder="Nombre completo" required>
                 </div>
                 <div class="gc-form-group">
                     <label>Rol del Inmueble / SII</label>
                     <input type="text" id="gc-rol" class="gc-form-control" placeholder="Ej. 124-15" required>
                 </div>
-                <div class="gc-form-group">
-                    <label>Especie Frutícola</label>
-                    <select id="gc-especie" class="gc-form-control" required>
-                        <option value="">Seleccione...</option>
-                        <option value="Cerezo">Cerezo</option>
-                        <option value="Arándano">Arándano</option>
-                        <option value="Avellano Europeo">Avellano Europeo</option>
-                        <option value="Manzano">Manzano</option>
-                        <option value="Nogal">Nogal</option>
-                        <option value="Otro">Otro</option>
-                    </select>
-                </div>
-                <div class="gc-form-group">
-                    <label>Variedad</label>
-                    <input type="text" id="gc-variedad" class="gc-form-control" placeholder="Opcional">
-                </div>
-                <div class="gc-form-group">
-                    <label>Tipo de Riego</label>
-                    <select id="gc-riego" class="gc-form-control" required>
-                        <option value="">Seleccione...</option>
-                        <option value="Goteo">Goteo</option>
-                        <option value="Aspersión">Aspersión</option>
-                        <option value="Surco">Surco</option>
-                        <option value="Secano">Secano</option>
-                    </select>
-                </div>
-                <div class="gc-form-group">
-                    <label>Infraestructura Presente</label>
-                    <div class="gc-checkbox-group">
-                        <label><input type="checkbox" value="Tranque" class="gc-infra"> Tranque</label>
-                        <label><input type="checkbox" value="Caseta de Riego" class="gc-infra"> Caseta de Riego</label>
-                        <label><input type="checkbox" value="Galpón/Acopio" class="gc-infra"> Galpón/Acopio</label>
+                
+                <!-- SECCIÓN PREDIO (Polígonos) -->
+                <div id="grupo-predio">
+                    <div class="gc-form-group">
+                        <label>Especie Frutícola</label>
+                        <select id="gc-especie" class="gc-form-control">
+                            <option value="">Seleccione...</option>
+                            <option value="Cerezo">Cerezo</option>
+                            <option value="Arándano">Arándano</option>
+                            <option value="Avellano Europeo">Avellano Europeo</option>
+                            <option value="Manzano">Manzano</option>
+                            <option value="Nogal">Nogal</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="gc-form-group">
+                        <label>Variedad</label>
+                        <input type="text" id="gc-variedad" class="gc-form-control" placeholder="Opcional">
+                    </div>
+                    <div class="gc-form-group">
+                        <label>Tipo de Riego</label>
+                        <select id="gc-riego" class="gc-form-control">
+                            <option value="">Seleccione...</option>
+                            <option value="Goteo">Goteo</option>
+                            <option value="Aspersión">Aspersión</option>
+                            <option value="Surco">Surco</option>
+                            <option value="Secano">Secano</option>
+                        </select>
+                    </div>
+                    <div class="gc-form-group">
+                        <label>Infraestructura Presente</label>
+                        <div class="gc-checkbox-group">
+                            <label><input type="checkbox" value="Tranque" class="gc-infra"> Tranque</label>
+                            <label><input type="checkbox" value="Caseta de Riego" class="gc-infra"> Caseta de Riego</label>
+                            <label><input type="checkbox" value="Galpón/Acopio" class="gc-infra"> Galpón/Acopio</label>
+                        </div>
                     </div>
                 </div>
+
+                <!-- SECCIÓN INFRAESTRUCTURA (Líneas y Puntos) -->
+                <div id="grupo-linea-punto" style="display: none;">
+                    <div class="gc-form-group">
+                        <label>Tipo de Infraestructura</label>
+                        <select id="gc-tipo-infra" class="gc-form-control">
+                            <option value="">Seleccione...</option>
+                            <option value="Canal de Riego">Canal de Riego (Línea)</option>
+                            <option value="Tubería">Tubería (Línea)</option>
+                            <option value="Camino / Sendero">Camino / Sendero (Línea)</option>
+                            <option value="Cerco / Límite">Cerco / Límite (Línea)</option>
+                            <option value="Caseta de Riego">Caseta de Riego (Punto)</option>
+                            <option value="Pozo / Tranque">Pozo / Captación (Punto)</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="gc-form-group">
                     <label>Condición General</label>
                     <select id="gc-condicion" class="gc-form-control" required>
@@ -324,21 +373,34 @@ async function guardarDatos(drawnItemsGroup) {
 
     const geojson = currentLayer.toGeoJSON();
     
+    // Obtenemos los valores dependiendo si es predio o infraestructura
+    const especieVal = currentDrawType === 'polygon' ? document.getElementById('gc-especie').value : "";
+    const variedadVal = currentDrawType === 'polygon' ? document.getElementById('gc-variedad').value : "";
+    const riegoVal = currentDrawType === 'polygon' ? document.getElementById('gc-riego').value : "";
+    const infraCheckboxesVal = currentDrawType === 'polygon' ? infraArray.join(', ') : "";
+    const tipoInfraVal = currentDrawType !== 'polygon' ? document.getElementById('gc-tipo-infra').value : "";
+    
     geojson.properties = {
+        tipo_geometria: currentDrawType, // polygon, polyline, marker
         productor: document.getElementById('gc-productor').value,
         rol_sii: rol,
-        especie: document.getElementById('gc-especie').value,
-        variedad: document.getElementById('gc-variedad').value,
-        tipo_riego: document.getElementById('gc-riego').value,
-        infraestructura: infraArray.join(', '),
+        // Datos de Predio
+        especie: especieVal,
+        variedad: variedadVal,
+        tipo_riego: riegoVal,
+        infraestructura_presente: infraCheckboxesVal,
+        // Datos de Infraestructura (Líneas/Puntos)
+        tipo_infraestructura: tipoInfraVal,
+        // Generales
         condicion: document.getElementById('gc-condicion').value,
-        superficie_ha: document.getElementById('gc-superficie').innerText,
+        medicion: document.getElementById('gc-superficie').innerText,
         fecha_captura: new Date().toISOString()
     };
 
     const dateStr = new Date().toISOString().replace(/[:.]/g, '-');
-    const fileName = `predio_${rol}_${dateStr}.geojson`;
-    const filePath = `capturas/${fileName}`; 
+    const tipoArchivo = currentDrawType === 'polygon' ? 'predio' : 'infra';
+    const fileName = `${tipoArchivo}_${rol}_${dateStr}.geojson`;
+    const filePath = `capturas/${fileName}`;  
 
     const contentStr = JSON.stringify(geojson, null, 2);
     const contentB64 = btoa(unescape(encodeURIComponent(contentStr)));
