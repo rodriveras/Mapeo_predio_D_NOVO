@@ -216,3 +216,22 @@
         margin-top: 60px;
     }
 }
+
+/* --- ETIQUETAS DE TEXTO EN EL MAPA --- */
+.region-label {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.region-label div {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.65);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    text-align: center;
+    letter-spacing: 1px;
+    pointer-events: none; /* Permite hacer clic "a través" del texto al mapa */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-transform: uppercase;
+}

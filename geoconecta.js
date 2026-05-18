@@ -52,11 +52,49 @@ document.addEventListener('DOMContentLoaded', function() {
         transparent: true,
         attribution: "CIREN Catastro Frutícola"
     });
+
+    // 4. Capa Límites Regionales (Vectorial GeoJSON)
+    var limitesRegionales = L.layerGroup().addTo(map); // Grupo para el control de capas
+    
+    // Obtenemos solo las líneas que son fronteras "Regionales" desde el servidor de CIREN
+    fetch("https://esri.ciren.cl/server/rest/services/LIMITES_ADMINISTRATIVOS/MapServer/1/query?where=nombre='Regional'&f=geojson&outSR=4326")
+        .then(response => response.json())
+        .then(data => {
+            L.geoJSON(data, {
+                style: {
+                    color: '#e74c3c', // Rojo para que resalte discretamente
+                    weight: 3,
+                    opacity: 0.7,
+                    dashArray: '8, 8' // Línea segmentada/punteada
+                }
+            }).addTo(limitesRegionales);
+
+            // Agregar etiquetas de texto estáticas para las 3 regiones principales
+            const etiquetasRegiones = [
+                { nombre: "REGIÓN DE ÑUBLE", lat: -36.6, lng: -71.8 },
+                { nombre: "REGIÓN DEL BIOBÍO", lat: -37.5, lng: -72.4 },
+                { nombre: "REGIÓN DE LA ARAUCANÍA", lat: -38.7, lng: -72.2 }
+            ];
+
+            etiquetasRegiones.forEach(region => {
+                var labelIcon = L.divIcon({
+                    className: 'region-label',
+                    html: `<div>${region.nombre}</div>`,
+                    iconSize: [200, 20],
+                    iconAnchor: [100, 10]
+                });
+                L.marker([region.lat, region.lng], {icon: labelIcon, interactive: false}).addTo(limitesRegionales);
+            });
+        })
+        .catch(err => console.error("Error cargando límites:", err));
     
     // Añadimos el control para cambiar entre capas
     L.control.layers(
         {"Satélite (Google)": googleSat, "Calles (OSM)": osm}, 
-        {"Catastro Frutícola (CIREN)": cirenWMS}
+        {
+            "Límites Regionales": limitesRegionales,
+            "Catastro Frutícola (CIREN)": cirenWMS
+        }
     ).addTo(map);
 
     // --- NUEVA HERRAMIENTA: BOTÓN DE GEOLOCALIZACIÓN ---
