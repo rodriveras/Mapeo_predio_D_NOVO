@@ -138,14 +138,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     // --- FIN GEOLOCALIZACIÓN ---
 
-    // 4. Configurar Leaflet.draw
+    // 5. Configurar Leaflet.draw
     var drawnItems = new L.FeatureGroup();
     map.addLayer(drawnItems);
 
     var drawControl = new L.Control.Draw({
-        edit: {
-            featureGroup: drawnItems
-        },
+        edit: false, // Oculta los botones de Lápiz y Tarro de Basura
         draw: {
             polygon: {
                 allowIntersection: false, 
