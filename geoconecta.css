@@ -235,3 +235,16 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-transform: uppercase;
 }
+
+/* --- ESTILO DE LOS PUNTOS/NODOS AL DIBUJAR --- */
+/* Leaflet.draw hace los cuadros gigantes (20x20) en pantallas táctiles. Esto lo corrige y los hace redondos. */
+.leaflet-editing-icon {
+    width: 10px !important;
+    height: 10px !important;
+    margin-left: -5px !important;
+    margin-top: -5px !important;
+    border-radius: 50% !important; /* Los hace circulares en lugar de cuadrados */
+    border: 2px solid #e74c3c !important; /* Borde rojo corporativo */
+    background-color: #ffffff !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4) !important;
+}

@@ -139,7 +139,25 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     // --- FIN GEOLOCALIZACIÓN ---
 
-    // 5. Configurar Leaflet.draw
+    // 5. Traducción de herramientas al Español
+    L.drawLocal.draw.toolbar.actions.title = 'Cancelar el dibujo';
+    L.drawLocal.draw.toolbar.actions.text = 'Cancelar';
+    L.drawLocal.draw.toolbar.finish.title = 'Finalizar el dibujo';
+    L.drawLocal.draw.toolbar.finish.text = 'Terminar';
+    L.drawLocal.draw.toolbar.undo.title = 'Eliminar el último punto dibujado';
+    L.drawLocal.draw.toolbar.undo.text = 'Deshacer punto';
+    
+    L.drawLocal.draw.handlers.polygon.tooltip.start = 'Toca para empezar a dibujar el predio.';
+    L.drawLocal.draw.handlers.polygon.tooltip.cont = 'Toca para seguir dibujando.';
+    L.drawLocal.draw.handlers.polygon.tooltip.end = 'Toca el primer punto para cerrar el predio.';
+    
+    L.drawLocal.draw.handlers.polyline.tooltip.start = 'Toca para empezar a dibujar la línea.';
+    L.drawLocal.draw.handlers.polyline.tooltip.cont = 'Toca para seguir dibujando la línea.';
+    L.drawLocal.draw.handlers.polyline.tooltip.end = 'Toca el último punto para terminar.';
+
+    L.drawLocal.draw.handlers.marker.tooltip.start = 'Toca el mapa para colocar el marcador.';
+
+    // 6. Configurar Leaflet.draw
     var drawnItems = new L.FeatureGroup();
     map.addLayer(drawnItems);
 
