@@ -143,6 +143,13 @@ document.addEventListener('DOMContentLoaded', function() {
     var drawnItems = new L.FeatureGroup();
     map.addLayer(drawnItems);
 
+    // PARCHE DE COMPATIBILIDAD: Soluciona el error donde la línea se termina en el primer clic
+    // Esto ocurre por un conflicto entre la versión de Leaflet y Leaflet.draw en pantallas táctiles
+    if (L.Browser.touch) {
+        L.Draw.Polyline.prototype._onTouch = L.Util.falseFn;
+        window.type = '';
+    }
+
     var drawControl = new L.Control.Draw({
         edit: false, // Oculta los botones de Lápiz y Tarro de Basura
         draw: {
