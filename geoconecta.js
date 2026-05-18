@@ -227,13 +227,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
         } else {
             // Línea o Punto
+            const infraSelect = document.getElementById('gc-tipo-infra');
+            infraSelect.innerHTML = '<option value="">Seleccione...</option>'; // Limpiar opciones
+            
             if (currentDrawType === 'polyline') {
                 var longitud = turf.length(geojson, {units: 'meters'});
                 medidaStr = longitud.toFixed(1) + " metros";
                 labelTexto = "Longitud de Canal/Tubería";
+                
+                // Solo opciones de infraestructura lineal
+                infraSelect.innerHTML += `
+                    <option value="Canal de Riego">Canal de Riego</option>
+                    <option value="Tubería">Tubería</option>
+                    <option value="Camino / Sendero">Camino / Sendero</option>
+                    <option value="Cerco / Límite">Cerco / Límite</option>
+                    <option value="Otro">Otro</option>
+                `;
             } else {
                 medidaStr = "1 Unidad";
                 labelTexto = "Punto de Infraestructura";
+                
+                // Solo opciones de infraestructura puntual
+                infraSelect.innerHTML += `
+                    <option value="Caseta de Riego">Caseta de Riego</option>
+                    <option value="Pozo / Captación">Pozo / Captación</option>
+                    <option value="Estación Meteorológica">Estación Meteorológica</option>
+                    <option value="Acopio / Galpón">Acopio / Galpón</option>
+                    <option value="Otro">Otro</option>
+                `;
             }
             
             tituloForm.innerText = "Datos de Infraestructura";
@@ -321,14 +342,7 @@ function inyectarFormulario() {
                     <div class="gc-form-group">
                         <label>Tipo de Infraestructura</label>
                         <select id="gc-tipo-infra" class="gc-form-control">
-                            <option value="">Seleccione...</option>
-                            <option value="Canal de Riego">Canal de Riego (Línea)</option>
-                            <option value="Tubería">Tubería (Línea)</option>
-                            <option value="Camino / Sendero">Camino / Sendero (Línea)</option>
-                            <option value="Cerco / Límite">Cerco / Límite (Línea)</option>
-                            <option value="Caseta de Riego">Caseta de Riego (Punto)</option>
-                            <option value="Pozo / Tranque">Pozo / Captación (Punto)</option>
-                            <option value="Otro">Otro</option>
+                            <!-- Opciones inyectadas dinámicamente vía JavaScript -->
                         </select>
                     </div>
                 </div>
