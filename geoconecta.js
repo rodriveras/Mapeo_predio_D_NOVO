@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', function() {
     map = L.map('map', {
         maxBounds: bounds,         // Restringe el mapa a esta caja
         maxBoundsViscosity: 1.0,   // Evita que el usuario "arrastre" el mapa fuera del área
-        minZoom: 7                 // Evita que se alejen a ver todo el mundo
+        minZoom: 7,                // Evita que se alejen a ver todo el mundo
+        tap: false                 // SOLUCIÓN: Evita el bug del "doble clic fantasma" al dibujar líneas en celulares
     });
     
     // Ajusta automáticamente el zoom para que se vean las 3 regiones en la pantalla
