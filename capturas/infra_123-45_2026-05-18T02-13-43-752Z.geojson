@@ -1,0 +1,23 @@
+{
+  "type": "Feature",
+  "properties": {
+    "tipo_geometria": "marker",
+    "productor": "rodrigo",
+    "rol_sii": "123-45",
+    "especie": "",
+    "variedad": "",
+    "tipo_riego": "",
+    "infraestructura_presente": "",
+    "tipo_infraestructura": "Caseta de Riego",
+    "condicion": "Excelente",
+    "medicion": "1 Unidad",
+    "fecha_captura": "2026-05-18T02:13:43.751Z"
+  },
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      -72.715073,
+      -37.437248
+    ]
+  }
+}
