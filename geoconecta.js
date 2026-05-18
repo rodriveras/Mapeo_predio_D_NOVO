@@ -425,6 +425,31 @@ async function guardarDatos(drawnItemsGroup) {
         if (response.ok) {
             alert('¡Geometría y metadatos guardados correctamente en GitHub!');
             document.getElementById('geoconecta-modal').style.display = 'none';
+            
+            // Crear una ventana emergente (Popup) para ver los datos registrados en el mapa
+            let popupContent = `
+                <div style="font-family:'Segoe UI', sans-serif;">
+                    <h4 style="margin:0 0 8px 0; border-bottom:1px solid #ccc; padding-bottom:5px; color:#2c3e50;">Registro Guardado</h4>
+                    <b>Rol SII:</b> ${geojson.properties.rol_sii}<br>
+                    <b>Responsable:</b> ${geojson.properties.productor}<br>
+                    <b>Condición:</b> ${geojson.properties.condicion}<br>
+            `;
+            
+            if (currentDrawType === 'polygon') {
+                popupContent += `
+                    <b>Especie:</b> ${geojson.properties.especie} ${geojson.properties.variedad ? '('+geojson.properties.variedad+')' : ''}<br>
+                    <b>Riego:</b> ${geojson.properties.tipo_riego}<br>
+                    <b>Superficie:</b> <span style="color:#27ae60; font-weight:bold;">${geojson.properties.medicion}</span>
+                `;
+            } else {
+                popupContent += `
+                    <b>Tipo Infraestructura:</b> ${geojson.properties.tipo_infraestructura}<br>
+                    <b>Dimensión:</b> <span style="color:#2980b9; font-weight:bold;">${geojson.properties.medicion}</span>
+                `;
+            }
+            popupContent += `</div>`;
+            
+            currentLayer.bindPopup(popupContent);
             drawnItemsGroup.addLayer(currentLayer);
             document.getElementById('geoconecta-form').reset();
         } else {
