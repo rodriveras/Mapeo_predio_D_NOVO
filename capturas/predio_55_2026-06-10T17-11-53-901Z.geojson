@@ -1,0 +1,47 @@
+{
+  "type": "Feature",
+  "properties": {
+    "tipo_geometria": "polygon",
+    "productor": "Mónica González López huertos Santa marta",
+    "rol_sii": "55",
+    "especie": "Arándano",
+    "variedad": "Legacy, brillita, diuk",
+    "tipo_riego": "Goteo",
+    "infraestructura_presente": "Caseta de Riego",
+    "tipo_infraestructura": "",
+    "condicion": "Bueno",
+    "medicion": "9.655 Ha",
+    "fecha_captura": "2026-06-10T17:11:53.900Z"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -71.942554,
+          -36.675054
+        ],
+        [
+          -71.941266,
+          -36.675639
+        ],
+        [
+          -71.938262,
+          -36.669355
+        ],
+        [
+          -71.939442,
+          -36.668908
+        ],
+        [
+          -71.939646,
+          -36.669011
+        ],
+        [
+          -71.942554,
+          -36.675054
+        ]
+      ]
+    ]
+  }
+}
