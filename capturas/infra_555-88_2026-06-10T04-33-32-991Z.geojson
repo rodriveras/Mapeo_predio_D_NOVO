@@ -1,0 +1,23 @@
+{
+  "type": "Feature",
+  "properties": {
+    "tipo_geometria": "marker",
+    "productor": "jhuh",
+    "rol_sii": "555-88",
+    "especie": "",
+    "variedad": "",
+    "tipo_riego": "",
+    "infraestructura_presente": "",
+    "tipo_infraestructura": "Caseta de Riego",
+    "condicion": "Excelente",
+    "medicion": "1 Unidad",
+    "fecha_captura": "2026-06-10T04:33:32.991Z"
+  },
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      -72.178845,
+      -37.984866
+    ]
+  }
+}
