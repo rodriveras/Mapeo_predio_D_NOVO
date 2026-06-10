@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "properties": {
+    "tipo_geometria": "polygon",
+    "productor": "Tetrt",
+    "rol_sii": "2334",
+    "especie": "Arándano",
+    "variedad": "",
+    "tipo_riego": "Goteo",
+    "infraestructura_presente": "Tranque",
+    "tipo_infraestructura": "",
+    "condicion": "Excelente",
+    "medicion": "6.129 Ha",
+    "fecha_captura": "2026-06-10T16:21:46.517Z"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -71.942626,
+          -36.675119
+        ],
+        [
+          -71.939944,
+          -36.669642
+        ],
+        [
+          -71.939333,
+          -36.671466
+        ],
+        [
+          -71.940454,
+          -36.673953
+        ],
+        [
+          -71.942626,
+          -36.675119
+        ]
+      ]
+    ]
+  }
+}
