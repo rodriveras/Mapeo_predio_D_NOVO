@@ -1,0 +1,47 @@
+{
+  "type": "Feature",
+  "properties": {
+    "tipo_geometria": "polygon",
+    "productor": "iy77",
+    "rol_sii": "444-4",
+    "especie": "Cerezo",
+    "variedad": "",
+    "tipo_riego": "Goteo",
+    "infraestructura_presente": "Caseta de Riego",
+    "tipo_infraestructura": "",
+    "condicion": "Excelente",
+    "medicion": "2.644 Ha",
+    "fecha_captura": "2026-06-10T04:30:28.432Z"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -72.180369,
+          -37.983995
+        ],
+        [
+          -72.180165,
+          -37.983927
+        ],
+        [
+          -72.17891,
+          -37.984562
+        ],
+        [
+          -72.179253,
+          -37.98583
+        ],
+        [
+          -72.181034,
+          -37.985728
+        ],
+        [
+          -72.180369,
+          -37.983995
+        ]
+      ]
+    ]
+  }
+}
